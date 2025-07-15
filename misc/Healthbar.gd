@@ -18,8 +18,6 @@ func _ready():
 
 	player.health_changed.connect(_on_health_changed)
 	_on_health_changed(player.hitpoints)
-	pass # Replace with function body.
-
 
 # You should probably rewrite this.
 func _on_health_changed(new_hp):

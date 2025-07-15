@@ -21,7 +21,7 @@ func _ready():
 	hide()
 
 func show_dialog(new_text, speaker):
-	print("DialogBox.show_dialog() ->", new_text, speaker)
+	print("DialogBox.show_dialog() -> ", new_text, speaker)
 	dialog_text.text = new_text
 	$nametag/label.text = speaker
 	lines_to_skip = 0

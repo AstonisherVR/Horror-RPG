@@ -18,12 +18,12 @@ using text to speech, etc)
 signal dialog_started
 signal dialog_ended
 
-var active = false
+var active: bool = false
 
 var dialog_box = null: set = _set_dialog_box
 
 func show_dialog(text: String, speaker: String):
-	print("Dialogs.show_dialog() called with text:", text, "speaker:", speaker)
+	print("Dialogs.show_dialog() called with text: ", text, "speaker: ", speaker)
 	if is_instance_valid(dialog_box):
 		dialog_box.show_dialog(text, speaker)
 	else:

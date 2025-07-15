@@ -27,6 +27,7 @@ visible = false
 
 [node name="Healthbar" parent="." instance=ExtResource("4")]
 offset_right = 14.0
+script = null
 
 [node name="TouchInterface" type="Node2D" parent="."]
 modulate = Color(1, 1, 1, 0.501961)

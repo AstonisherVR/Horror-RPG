@@ -1,56 +1,58 @@
 class_name Player extends CharacterBody2D
 signal health_changed(current_hp)
 
-@export var walk_speed: int = 500
-@export var hitpoints: int = 3
+@export var walk_speed: int = 768
 @onready var player_sprites: AnimatedSprite2D = %"Player Sprites"
 
-enum State { BLOCKED, IDLE, WALKING }
+enum State { IDLE, WALKING, TALKING }
 
 var state: State = State.IDLE
-var facing: String = "down"
-var my_name: StringName = "Ivy"
+var facing: StringName = &"down"
+var player_name: StringName = &"Ivy"
 
 func _ready() -> void:
 	_move_to_spawnpoint()
 	_connect_to_dialog_system()
 
 func _physics_process(_delta: float) -> void:
-	_process_state()
-	_update_animation()
-
-func _process_state() -> void:
 	match state:
 		State.IDLE:
-			if _get_input_dir() != Vector2.ZERO:
-				state = State.WALKING
+			process_idle_state()
 		State.WALKING:
-			_handle_movement()
+			process_walking_state()
+		State.TALKING:
+			process_talking_state()
+	update_animation()
 
-func _update_animation() -> void:
-	player_sprites.flip_h = (facing == "left")
-	if velocity != Vector2.ZERO:
-		player_sprites.play("walk_" + (facing if facing != "left" else "right"))
-	else:
-		player_sprites.stop()
-		player_sprites.frame = 1
+func process_idle_state() -> void:
+	if _get_input_dir() != Vector2.ZERO:
+		state = State.WALKING
 
-func _handle_movement() -> void:
-	var direction = _get_input_dir()
-	if direction != Vector2.ZERO:
-		velocity = direction * walk_speed
-		_update_facing(direction)
+func process_walking_state() -> void:
+	var dir: Vector2 = _get_input_dir()
+	if dir != Vector2.ZERO:
+		velocity = dir * walk_speed
+		if abs(dir.x) >= abs(dir.y):
+			facing = "left" if dir.x < 0 else "right"
+		else:
+			facing = "up" if dir.y < 0 else "down"
 	else:
-		_go_to_idle()
+		velocity = Vector2.ZERO
+		state = State.IDLE
 	move_and_slide()
 
-func _update_facing(direction: Vector2) -> void:
-	if abs(direction.x) > abs(direction.y):
-		facing = "left" if direction.x < 0 else "right"
-	else:
-		facing = "up" if direction.y < 0 else "down"
+func process_talking_state() -> void:
+	velocity = Vector2.ZERO
 
-func _go_to_idle() -> void:
+func update_animation() -> void:
+	player_sprites.flip_h = (facing == "left")
+	if velocity == Vector2.ZERO:
+		player_sprites.stop()
+		player_sprites.frame = 1
+	else:
+		player_sprites.play("walk_" + facing)
+
+func go_to_idle() -> void:
 	velocity = Vector2.ZERO
 	state = State.IDLE
 
@@ -74,7 +76,8 @@ func _connect_to_dialog_system() -> void:
 
 # Signal handlers
 func _on_dialog_started() -> void:
-	state = State.BLOCKED
+	state = State.TALKING
+	player_sprites.stop()
 
 func _on_dialog_ended() -> void:
 	state = State.IDLE
