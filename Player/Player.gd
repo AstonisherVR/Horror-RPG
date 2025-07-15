@@ -1,7 +1,7 @@
 class_name Player extends CharacterBody2D
 signal health_changed(current_hp)
 
-@export var walk_speed: int = 768
+@export var walk_speed: int = 1024 #768
 @onready var player_sprites: AnimatedSprite2D = %"Player Sprites"
 
 enum State { IDLE, WALKING, TALKING }
@@ -9,6 +9,10 @@ enum State { IDLE, WALKING, TALKING }
 var state: State = State.IDLE
 var facing: StringName = &"down"
 var player_name: StringName = &"Ivy"
+var move_dir: Vector2 = Vector2.ZERO
+var target_position: Vector2
+var is_moving: bool = false
+const TILE_SIZE: int = 128
 
 func _ready() -> void:
 	_move_to_spawnpoint()
@@ -25,41 +29,62 @@ func _physics_process(_delta: float) -> void:
 	update_animation()
 
 func process_idle_state() -> void:
-	if _get_input_dir() != Vector2.ZERO:
+	var input_dir = _get_input_dir()
+	if input_dir != Vector2.ZERO:
+		# Start moving
+		move_dir = input_dir.snapped(Vector2.ONE)  # Normalize to one axis
+		_set_facing(move_dir)
+		target_position = global_position + move_dir * TILE_SIZE
+		is_moving = true
 		state = State.WALKING
 
-func process_walking_state() -> void:
-	var dir: Vector2 = _get_input_dir()
-	if dir != Vector2.ZERO:
-		velocity = dir * walk_speed
-		if abs(dir.x) >= abs(dir.y):
-			facing = "left" if dir.x < 0 else "right"
-		else:
-			facing = "up" if dir.y < 0 else "down"
+func _set_facing(dir: Vector2) -> void:
+	if abs(dir.x) > abs(dir.y):
+		facing = "left" if dir.x < 0 else "right"
 	else:
-		velocity = Vector2.ZERO
-		state = State.IDLE
-	move_and_slide()
+		facing = "up" if dir.y < 0 else "down"
+
+func process_walking_state() -> void:
+	if is_moving:
+		var to_target = target_position - global_position
+		var step = move_dir * walk_speed * get_physics_process_delta_time()
+		if step.length() >= to_target.length():
+			global_position = target_position
+			is_moving = false
+			# Check input and continue walking if same direction is held
+			var input_dir: Vector2 = _get_input_dir()
+			if input_dir == move_dir:
+				# Queue next tile
+				target_position += move_dir * TILE_SIZE
+				is_moving = true
+			else:
+				state = State.IDLE
+		else:
+			global_position += step
 
 func process_talking_state() -> void:
 	velocity = Vector2.ZERO
 
 func update_animation() -> void:
 	player_sprites.flip_h = (facing == "left")
-	if velocity == Vector2.ZERO:
+	if is_moving:
+		player_sprites.play("walk_" + facing)
+	else:
 		player_sprites.stop()
 		player_sprites.frame = 1
-	else:
-		player_sprites.play("walk_" + facing)
 
 func go_to_idle() -> void:
 	velocity = Vector2.ZERO
 	state = State.IDLE
 
 func _get_input_dir() -> Vector2:
-	return Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
+	var raw_input = Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
+	if abs(raw_input.x) > abs(raw_input.y):
+		return Vector2(sign(raw_input.x), 0)
+	elif abs(raw_input.y) > 0:
+		return Vector2(0, sign(raw_input.y))
+	return Vector2.ZERO
 
-# Setup functions
 func _move_to_spawnpoint() -> void:
 	var spawnpoints = get_tree().get_nodes_in_group("spawnpoints")
 	for spawnpoint in spawnpoints:
@@ -71,10 +96,7 @@ func _connect_to_dialog_system() -> void:
 	var connection_result = (
 		Dialogs.dialog_started.connect(_on_dialog_started) == OK and
 		Dialogs.dialog_ended.connect(_on_dialog_ended) == OK)
-	if not connection_result:
-		push_error("Failed to connect to dialog system")
 
-# Signal handlers
 func _on_dialog_started() -> void:
 	state = State.TALKING
 	player_sprites.stop()
