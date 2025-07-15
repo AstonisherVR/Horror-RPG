@@ -1,0 +1,72 @@
+[gd_scene load_steps=7 format=3 uid="uid://bkba04xxwfbsx"]
+
+[ext_resource type="Script" uid="uid://c7fxu4spk7iyg" path="res://NPC/Npc.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dscm5ic80ak2p" path="res://textures/pj/frames/idle_down0000.png" id="2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_86cpx"]
+radius = 48.0
+
+[sub_resource type="Animation" id="1"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.564087, 2.50995), Vector2(0.564087, 4.44937)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.25, 0.25), Vector2(0.25, 0.236)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_86cpx"]
+_data = {
+&"idle": SubResource("1")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_86cpx"]
+size = Vector2(32, 42)
+
+[node name="NPC" type="Area2D"]
+input_pickable = false
+script = ExtResource("1")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+modulate = Color(0.882861, 0.196885, 0.587674, 1)
+position = Vector2(0.564087, 2.50995)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2")
+offset = Vector2(3.3446, -93.3282)
+
+[node name="Trigger" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("CircleShape2D_86cpx")
+
+[node name="anims" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_86cpx")
+}
+autoplay = "idle"
+
+[node name="Body Collision" type="StaticBody2D" parent="."]
+position = Vector2(0, -21)
+
+[node name="Collision" type="CollisionShape2D" parent="Body Collision"]
+shape = SubResource("RectangleShape2D_86cpx")
+metadata/_edit_lock_ = true

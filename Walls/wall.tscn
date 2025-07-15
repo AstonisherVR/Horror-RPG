@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://4lkb366ycln8"]
+
+[ext_resource type="Texture2D" uid="uid://bj7h2fc5jx4ax" path="res://addons/phantom_camera/examples/textures/3D/checker_pattern_dark.png" id="1_ujrbx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gn8xn"]
+size = Vector2(1280, 20)
+
+[node name="Wall" type="StaticBody2D"]
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_gn8xn")
+
+[node name="Wall Sprite" type="Sprite2D" parent="."]
+modulate = Color(1, 0.226058, 0.855685, 1)
+position = Vector2(0, -1.07288e-06)
+scale = Vector2(2.51, 0.039)
+texture = ExtResource("1_ujrbx")
