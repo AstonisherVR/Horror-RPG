@@ -1,25 +1,27 @@
-class_name Player extends CharacterBody2D
+class_name Player
+extends CharacterBody2D
 
 @export var walk_speed: int = 1536 #768
-@onready var player_sprites: AnimatedSprite2D = %"Player Sprites"
+@onready var player_sprites: AnimatedSprite2D = $"Player Sprites"
 
 const TILE_SIZE: int = 512
-const SPIDER_STRINGS: PackedScene = preload("res://spider_strings.tscn") 
+const SPIDER_STRINGS: PackedScene = preload("res://spider_strings.tscn")
 
 enum State { IDLE, WALKING, TALKING }
 var state: State = State.IDLE
 
-var move_dir: Vector2
-var target_position: Vector2
-var prev_direction: Vector2
+var move_dir: Vector2 = Vector2.ZERO
+var prev_direction: Vector2 = Vector2.ZERO
+
+var target_position: Vector2 = Vector2.ZERO
 
 var string_limit: int = 0
 var strings_used: int = 0
 
 var string_positions: Array[Vector2] = []
 
-var facing: StringName = &"down"
-var player_name: StringName = &"Ivy"
+var facing: StringName = "down"
+var player_name: StringName = "Ivy"
 
 var is_holding_cancel: bool = false
 var is_moving: bool = false
@@ -41,9 +43,18 @@ func _physics_process(delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("cancel_string"):
-		cancel_current_string()
+		# Only allow cancel if player is idle and holding string
+		if state == State.IDLE and string_attached and not is_moving:
+			cancel_current_string()
+	if event.is_action_pressed("interact"):
+		if string_attached and is_web_tile(global_position):
+			print("Placed string via interaction")
+			string_attached = false
+			Bedroom.total_strings_placed += 1
 
 func cancel_current_string() -> void:
+	if not string_attached:
+		return
 	string_attached = false
 	for pos in string_positions:
 		remove_string_at(pos)
@@ -59,21 +70,24 @@ func process_idle_state() -> void:
 	var next_pos = global_position + input_dir * TILE_SIZE
 	var can_move = true
 
-	# Wall check (example - use your own check here)
 	if is_tile_blocked(next_pos):
+		print("Blocked by wall at:", next_pos)
 		can_move = false
 
-	# String check
+	# Spider string rules
 	if string_attached:
-		var is_backtracking = input_dir == -move_dir and string_positions.size() > 0 and next_pos == string_positions[-1]
-		var is_forward = input_dir == move_dir
+		var is_backtracking = string_positions.size() > 0 and next_pos == string_positions[-1]
 
-		if not is_backtracking and not is_forward:
-			can_move = false
-		elif not is_backtracking and strings_used >= string_limit:
-			can_move = false
+		if not is_backtracking:
+			if strings_used >= string_limit:
+				can_move = false
+				print("Cannot move: string limit reached.")
+			elif _is_string_at_position(next_pos):
+				can_move = false
+				print("Cannot move: string already exists at", next_pos)
 
 	if can_move:
+		print("Moving from", global_position, "to", next_pos)
 		prev_direction = move_dir
 		move_dir = input_dir
 		target_position = next_pos
@@ -81,11 +95,6 @@ func process_idle_state() -> void:
 		_set_facing(move_dir)
 		state = State.WALKING
 
-func _set_facing(dir: Vector2) -> void:
-	if abs(dir.x) > abs(dir.y):
-		facing = "left" if dir.x < 0 else "right"
-	else:
-		facing = "up" if dir.y < 0 else "down"
 
 func process_walking_state() -> void:
 	if not is_moving:
@@ -98,35 +107,66 @@ func process_walking_state() -> void:
 		global_position = target_position
 		is_moving = false
 
-		# Handle string backtracking
-		if string_attached and string_positions.size() > 0 and global_position == string_positions[-1]:
-			var last_pos = string_positions.pop_back()
-			remove_string_at(last_pos)
-			strings_used -= 1
-			print("Backtracked, string removed")
+		if string_attached:
+			# Check if player is moving backward along string trail
+			var backtracked = string_positions.size() > 0 and global_position == string_positions[-1]
 
-		# Handle forward string placing
-		elif string_attached and prev_direction != Vector2.ZERO and strings_used < string_limit:
-			var new_string_pos = global_position - (move_dir * TILE_SIZE * 0.5)
-			create_string_at_position(new_string_pos)
+			if backtracked:
+				var last_pos = string_positions.pop_back()
+				remove_string_at(last_pos)
+				strings_used -= 1
+				print("Backtracked, removed string at:", last_pos)
+			elif strings_used < string_limit:
+				# Place string on the tile player just left (prev position)
+				var last_pos = global_position - move_dir * TILE_SIZE
+				create_string_at_position(last_pos)
 
 		state = State.IDLE
 	else:
 		global_position += step
 
+func _set_facing(dir: Vector2) -> void:
+	if abs(dir.x) > abs(dir.y):
+		facing = "left" if dir.x < 0 else "right"
+	else:
+		facing = "up" if dir.y < 0 else "down"
+
+func _is_string_at_position(pos: Vector2) -> bool:
+	for existing_pos in string_positions:
+		if existing_pos == pos:
+			return true
+	return false
+
 func is_tile_blocked(pos: Vector2) -> bool:
-	var tilemap = get_parent().get_node("TileMap") # Adjust path as needed
+	var tilemap = $"../Tiles Holder/Ground"
 	var cell = tilemap.local_to_map(pos)
-	return tilemap.get_cell_source_id(0, cell) != -1 and tilemap.get_cell_tile_data(0, cell).get_custom_data("is_wall") == true
+	# Check if cell is valid and has 'is_wall' custom data
+	if tilemap.get_cell_source_id(cell) == -1:
+		return false
+	var tile_data = tilemap.get_cell_tile_data(cell)
+	if tile_data:
+		return tile_data.get_custom_data("is_wall") == true
+	return false
 
 func process_talking_state() -> void:
-	velocity = Vector2.ZERO
+	# You are not moving while talking
+	# Can add more dialog-related code here
+	pass
 
 func remove_string_at(pos: Vector2) -> void:
+	# Make sure SpiderStrings is the correct class name for the string node/script
 	for child in get_parent().get_children():
 		if child is Spider_Strings and child.global_position == pos:
 			child.queue_free()
 			break
+
+func is_web_tile(pos: Vector2) -> bool:
+	var tilemap = $"../Tiles Holder/Ground"
+	var cell = tilemap.local_to_map(pos)
+	var tile_data = tilemap.get_cell_tile_data(cell)
+	if tile_data:
+		return tile_data.get_custom_data("web_tile") == true
+	return false
 
 func update_animation() -> void:
 	player_sprites.flip_h = (facing == "left")
@@ -136,12 +176,8 @@ func update_animation() -> void:
 		player_sprites.stop()
 		player_sprites.frame = 1
 
-func go_to_idle() -> void:
-	velocity = Vector2.ZERO
-	state = State.IDLE
-
 func _get_input_dir() -> Vector2:
-	var raw_input = Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
+	var raw_input = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	if abs(raw_input.x) > abs(raw_input.y):
 		return Vector2(sign(raw_input.x), 0)
 	elif abs(raw_input.y) > 0:
@@ -149,28 +185,26 @@ func _get_input_dir() -> Vector2:
 	return Vector2.ZERO
 
 func create_string_at_position(pos: Vector2) -> void:
+	# You want to place string on ANY tile, not only web tiles, so removing web tile check
 	if strings_used >= string_limit:
 		print("Reached string limit.")
 		return
-
 	strings_used += 1
 	var new_string: Spider_Strings = SPIDER_STRINGS.instantiate()
-	var string_type: StringName = get_string_type(prev_direction, move_dir)
 	new_string.global_position = pos
-	string_positions.append(new_string.global_position)
-	add_sibling(new_string)
+	string_positions.append(pos)
+	get_parent().add_child(new_string)
+	# Decide line orientation by last move_dir
+	var string_type: StringName = get_string_type(move_dir)
 	new_string.lines[string_type].visible = true
-	print("String placed: ", string_type)
+	print("String placed at", pos, "Type:", string_type)
 
-func get_string_type(prev: Vector2, current: Vector2) -> StringName:
-	var string_type: StringName
-	if current.x != 0:
-		string_type = &"String Horizontal"
-	elif current.y != 0:
-		string_type = &"String Vertical"
-	else:
-		string_type = &"String Horizontal"
-	return string_type
+func get_string_type(dir: Vector2) -> StringName:
+	if abs(dir.x) > 0:
+		return "String Horizontal"
+	elif abs(dir.y) > 0:
+		return "String Vertical"
+	return "String Horizontal"
 
 func _move_to_spawnpoint() -> void:
 	var spawnpoints = get_tree().get_nodes_in_group("spawnpoints")
@@ -180,14 +214,15 @@ func _move_to_spawnpoint() -> void:
 			break
 
 func _connect_to_dialog_system() -> void:
-	var connection_result = (
-		Dialogs.dialog_started.connect(_on_dialog_started) == OK and
-		Dialogs.dialog_ended.connect(_on_dialog_ended) == OK)
+	Dialogs.dialog_started.connect(_on_dialog_started)
+	Dialogs.dialog_ended.connect(_on_dialog_ended)
 
-func connect_to_spider(spider: Node):
+func connect_to_spider(spider: Node) -> void:
 	string_attached = true
 	string_limit = spider.max_strings
 	strings_used = 0
+	string_positions.clear()
+	print("Connected to spider. Limit:", string_limit)
 
 func _on_dialog_started() -> void:
 	state = State.TALKING

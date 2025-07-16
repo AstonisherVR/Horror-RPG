@@ -130,7 +130,7 @@ position = Vector2(0, -48)
 zoom = Vector2(0.175, 0.175)
 limit_left = -5376
 limit_top = -1792
-limit_right = 2304
+limit_right = 2816
 limit_bottom = 2816
 
 [node name="PhantomCameraHost" type="Node" parent="Camera"]
