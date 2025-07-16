@@ -1,7 +1,7 @@
 class_name Player extends CharacterBody2D
 signal health_changed(current_hp)
 
-@export var walk_speed: int = 1024 #768
+@export var walk_speed: int = 1536 #768
 @onready var player_sprites: AnimatedSprite2D = %"Player Sprites"
 
 enum State { IDLE, WALKING, TALKING }
@@ -12,7 +12,8 @@ var player_name: StringName = &"Ivy"
 var move_dir: Vector2 = Vector2.ZERO
 var target_position: Vector2
 var is_moving: bool = false
-const TILE_SIZE: int = 128
+const TILE_SIZE: int = 512
+
 
 func _ready() -> void:
 	_move_to_spawnpoint()
