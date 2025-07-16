@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://skue53a6ryne"]
+
+[ext_resource type="Texture2D" uid="uid://lks75ne2v65p" path="res://Floor Tiles/TILESHEET.png" id="1_ahky1"]
+[ext_resource type="Script" uid="uid://t6gw5sn2ysui" path="res://Floor Tiles/web_tile.gd" id="1_rsid3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_26pfs"]
+size = Vector2(512, 512)
+
+[node name="Web Tile" type="Area2D"]
+script = ExtResource("1_rsid3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_26pfs")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_ahky1")
+hframes = 4
+vframes = 2
+frame = 5
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

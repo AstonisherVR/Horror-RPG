@@ -20,6 +20,7 @@ y_sort_enabled = true
 metadata/_edit_lock_ = true
 
 [node name="Girl" parent="." instance=ExtResource("1_uda3f")]
+walk_speed = 1536
 
 [node name="PhantomCamera2D" type="Node2D" parent="." node_paths=PackedStringArray("follow_target")]
 top_level = true

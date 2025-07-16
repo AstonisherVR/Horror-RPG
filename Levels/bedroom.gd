@@ -1,10 +1,11 @@
-extends Node2D
+class_name Bedroom extends Node2D
 
 @onready var girl: Player = %Girl
 @onready var wake_up_animation: Node = %"Wake up Animation"
 @onready var girl_name = girl.player_name
 
 var remember_girl_speed: float = 0
+static var total_strings_placed: int = 0
 
 func _ready() -> void:
 	#wake_up_sequence()

@@ -94,7 +94,6 @@ tile_set = SubResource("TileSet_m2b15")
 
 [node name="Girl" parent="." instance=ExtResource("7_gvdbq")]
 unique_name_in_owner = true
-walk_speed = 1536
 
 [node name="UI" parent="." instance=ExtResource("8_qog7a")]
 
@@ -103,3 +102,10 @@ unique_name_in_owner = true
 visible = false
 position = Vector2(1, -38)
 scale = Vector2(8, 8)
+
+[connection signal="body_entered" from="Tiles Holder/Ground/Web Tile" to="Tiles Holder/Ground/Web Tile" method="_on_body_entered"]
+[connection signal="body_exited" from="Tiles Holder/Ground/Web Tile" to="Tiles Holder/Ground/Web Tile" method="_on_body_exited"]
+[connection signal="body_entered" from="Tiles Holder/Spider Asses/Spider Ass Right" to="Tiles Holder/Spider Asses/Spider Ass Right" method="_on_body_entered"]
+[connection signal="body_exited" from="Tiles Holder/Spider Asses/Spider Ass Right" to="Tiles Holder/Spider Asses/Spider Ass Right" method="_on_body_exited"]
+[connection signal="body_entered" from="Tiles Holder/Spider Asses/@Area2D@176218" to="Tiles Holder/Spider Asses/@Area2D@176218" method="_on_body_entered"]
+[connection signal="body_exited" from="Tiles Holder/Spider Asses/@Area2D@176218" to="Tiles Holder/Spider Asses/@Area2D@176218" method="_on_body_exited"]

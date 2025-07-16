@@ -1,19 +1,23 @@
 class_name Player extends CharacterBody2D
-signal health_changed(current_hp)
 
 @export var walk_speed: int = 1536 #768
 @onready var player_sprites: AnimatedSprite2D = %"Player Sprites"
 
-enum State { IDLE, WALKING, TALKING }
+const TILE_SIZE: int = 512
+const SPIDER_STRINGS: PackedScene = preload("res://spider_strings.tscn") 
 
+enum State { IDLE, WALKING, TALKING }
 var state: State = State.IDLE
+
+var move_dir: Vector2
+var target_position: Vector2
+var prev_direction: Vector2
+
 var facing: StringName = &"down"
 var player_name: StringName = &"Ivy"
-var move_dir: Vector2 = Vector2.ZERO
-var target_position: Vector2
-var is_moving: bool = false
-const TILE_SIZE: int = 512
 
+var is_moving: bool = false
+var string_attached: bool = false
 
 func _ready() -> void:
 	_move_to_spawnpoint()
@@ -55,9 +59,18 @@ func process_walking_state() -> void:
 			# Check input and continue walking if same direction is held
 			var input_dir: Vector2 = _get_input_dir()
 			if input_dir == move_dir:
-				# Queue next tile
 				target_position += move_dir * TILE_SIZE
 				is_moving = true
+	
+				if string_attached:
+					var new_string: Node2D = SPIDER_STRINGS.instantiate()
+					var string_type = get_string_type(prev_direction, move_dir)
+					new_string.lines[string_type].visible = true
+					new_string.global_position = global_position + (move_dir * TILE_SIZE * 0.5)
+
+					add_sibling(new_string)
+					prev_direction = move_dir
+
 			else:
 				state = State.IDLE
 		else:
@@ -85,6 +98,25 @@ func _get_input_dir() -> Vector2:
 	elif abs(raw_input.y) > 0:
 		return Vector2(0, sign(raw_input.y))
 	return Vector2.ZERO
+
+func get_string_type(prev: Vector2, current: Vector2) -> StringName:
+	if prev == current:
+		if current.x != 0:
+			return "String Horizontal"
+		elif current.y != 0:
+			return "String Vertical"
+	else:
+		if prev == Vector2.RIGHT and current == Vector2.UP: return "Edge Up Right"
+		if prev == Vector2.LEFT and current == Vector2.UP: return "Edge Up Left"
+		if prev == Vector2.RIGHT and current == Vector2.DOWN: return "Edge Down Right"
+		if prev == Vector2.LEFT and current == Vector2.DOWN: return "Edge Down Left"
+		if prev == Vector2.DOWN and current == Vector2.RIGHT: return "Edge Down Right"
+		if prev == Vector2.UP and current == Vector2.RIGHT: return "Edge Up Right"
+		if prev == Vector2.DOWN and current == Vector2.LEFT: return "Edge Down Left"
+		if prev == Vector2.UP and current == Vector2.LEFT: return "Edge Up Left"
+
+	return "String Horizontal"
+
 
 func _move_to_spawnpoint() -> void:
 	var spawnpoints = get_tree().get_nodes_in_group("spawnpoints")
