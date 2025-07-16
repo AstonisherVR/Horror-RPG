@@ -1,13 +1,13 @@
 [gd_scene load_steps=8 format=3 uid="uid://damx5ema0gns7"]
 
-[ext_resource type="PackedScene" uid="uid://ctd3mgp0s172q" path="res://Player/Player.tscn" id="1_e2o6t"]
-[ext_resource type="PackedScene" uid="uid://deqgnj30xx13t" path="res://misc/UI.tscn" id="2_feb5d"]
-[ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="3_fc0e3"]
-[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="4_7jktm"]
-[ext_resource type="PackedScene" uid="uid://bkba04xxwfbsx" path="res://NPC/Npc.tscn" id="5_7jktm"]
+[ext_resource type="PackedScene" uid="uid://ctd3mgp0s172q" path="res://Player/Player.tscn" id="1_uda3f"]
+[ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="2_jycte"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="3_ev4ff"]
+[ext_resource type="PackedScene" uid="uid://deqgnj30xx13t" path="res://misc/UI.tscn" id="4_xfsjo"]
+[ext_resource type="PackedScene" uid="uid://bkba04xxwfbsx" path="res://NPC/Npc.tscn" id="5_qe8hq"]
 
 [sub_resource type="Resource" id="Resource_fc0e3"]
-script = ExtResource("4_7jktm")
+script = ExtResource("3_ev4ff")
 duration = 1.0
 transition = 0
 ease = 2
@@ -19,12 +19,12 @@ size = Vector2(100, 100)
 y_sort_enabled = true
 metadata/_edit_lock_ = true
 
-[node name="Girl" parent="." instance=ExtResource("1_e2o6t")]
+[node name="Girl" parent="." instance=ExtResource("1_uda3f")]
 
 [node name="PhantomCamera2D" type="Node2D" parent="." node_paths=PackedStringArray("follow_target")]
 top_level = true
 position = Vector2(0, -48)
-script = ExtResource("3_fc0e3")
+script = ExtResource("2_jycte")
 follow_mode = 5
 follow_target = NodePath("../Girl")
 zoom = Vector2(0.175, 0.175)
@@ -39,7 +39,7 @@ metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 
 [node name="Interactables" type="Node" parent="."]
 
-[node name="UI" parent="." instance=ExtResource("2_feb5d")]
+[node name="UI" parent="." instance=ExtResource("4_xfsjo")]
 
 [node name="BG" type="Sprite2D" parent="."]
 visible = false
@@ -49,6 +49,6 @@ texture_repeat = 2
 scale = Vector2(50, 50)
 texture = SubResource("PlaceholderTexture2D_e2o6t")
 
-[node name="NPC" parent="." instance=ExtResource("5_7jktm")]
+[node name="NPC" parent="." instance=ExtResource("5_qe8hq")]
 position = Vector2(1034, -1)
 dialogs = Array[String](["HELLO ONCE", "HELLO AGAIN"])
