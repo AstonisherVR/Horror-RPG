@@ -3,3 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://cdkybxb4wwa5r" path="res://Spider Asses/spider_ass.tscn" id="1_18fow"]
 
 [node name="Spider Ass Right" instance=ExtResource("1_18fow")]
+
+[node name="Texture" parent="." index="1"]
+rotation = -1.57079

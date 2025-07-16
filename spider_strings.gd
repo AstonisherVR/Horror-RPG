@@ -1,15 +1,11 @@
-extends Node2D
+class_name Spider_Strings extends Node2D
 
-var lines: Dictionary[StringName, Line2D] = {
-&"String Vertical": %"String Line Vertical",
-&"String Horizontal": %"String Line Horizontal",
-&"Edge Up Right": %"Edge Line",
-&"Edge Down Right": %"Edge Line 2",
-&"Edge Down Left": %"Edge Line 3",
-&"Edge Up Left": %"Edge Line 4"}
+@onready var lines: Dictionary[StringName, Line2D] = {
+	&"String Vertical": %"String Line Vertical",
+	&"String Horizontal": %"String Line Horizontal"}
 
-var area_points: Dictionary[StringName, Line2D] = {
-&"Area Up": %"Area Up",
-&"Area Right": %"Area RIght",
-&"Area Down": %"Area Down",
-&"Area Left": %"Area Left",}
+@onready var area_points: Dictionary[StringName, Area2D] = {
+	&"Area Up": %"Area Up",
+	&"Area Right": %"Area Right",
+	&"Area Down": %"Area Down",
+	&"Area Left": %"Area Left"}

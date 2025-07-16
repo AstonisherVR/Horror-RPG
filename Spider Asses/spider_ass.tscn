@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cdkybxb4wwa5r"]
+[gd_scene load_steps=4 format=3 uid="uid://cdkybxb4wwa5r"]
 
 [ext_resource type="Script" uid="uid://cwmhicdks31b0" path="res://Spider Asses/spider_ass.gd" id="1_bqh0q"]
+[ext_resource type="Texture2D" uid="uid://cg2kdion7rkti" path="res://Spider Asses/Wall Spider.png" id="2_onsoa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_20daf"]
 size = Vector2(512, 256)
@@ -12,6 +13,7 @@ script = ExtResource("1_bqh0q")
 shape = SubResource("RectangleShape2D_20daf")
 
 [node name="Texture" type="Sprite2D" parent="."]
+texture = ExtResource("2_onsoa")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

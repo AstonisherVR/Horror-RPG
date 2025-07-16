@@ -13,9 +13,15 @@ var move_dir: Vector2
 var target_position: Vector2
 var prev_direction: Vector2
 
+var string_limit: int = 0
+var strings_used: int = 0
+
+var string_positions: Array[Vector2] = []
+
 var facing: StringName = &"down"
 var player_name: StringName = &"Ivy"
 
+var is_holding_cancel: bool = false
 var is_moving: bool = false
 var string_attached: bool = false
 
@@ -23,7 +29,7 @@ func _ready() -> void:
 	_move_to_spawnpoint()
 	_connect_to_dialog_system()
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	match state:
 		State.IDLE:
 			process_idle_state()
@@ -33,14 +39,27 @@ func _physics_process(_delta: float) -> void:
 			process_talking_state()
 	update_animation()
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("cancel_string"):
+		cancel_current_string()
+
+func cancel_current_string() -> void:
+	string_attached = false
+	for pos in string_positions:
+		remove_string_at(pos)
+	string_positions.clear()
+	strings_used = 0
+	print("String canceled.")
+
 func process_idle_state() -> void:
 	var input_dir = _get_input_dir()
 	if input_dir != Vector2.ZERO:
 		# Start moving
-		move_dir = input_dir.snapped(Vector2.ONE)  # Normalize to one axis
-		_set_facing(move_dir)
+		prev_direction = move_dir  # Store previous direction before updating
+		move_dir = input_dir.snapped(Vector2.ONE)
 		target_position = global_position + move_dir * TILE_SIZE
 		is_moving = true
+		_set_facing(move_dir)
 		state = State.WALKING
 
 func _set_facing(dir: Vector2) -> void:
@@ -53,24 +72,34 @@ func process_walking_state() -> void:
 	if is_moving:
 		var to_target = target_position - global_position
 		var step = move_dir * walk_speed * get_physics_process_delta_time()
+
 		if step.length() >= to_target.length():
+			# Snap to target position
 			global_position = target_position
 			is_moving = false
-			# Check input and continue walking if same direction is held
-			var input_dir: Vector2 = _get_input_dir()
+
+			var input_dir: Vector2 = _get_input_dir().snapped(Vector2.ONE)
+
+			# Handle backtracking (remove last string)
+			if input_dir == -move_dir and string_positions.size() > 0:
+				var last_pos = string_positions.pop_back()
+				remove_string_at(last_pos)
+				strings_used -= 1
+				print("Backtracked, string removed")
+
+			# Handle forward movement (place new string)
+			elif string_attached and prev_direction != Vector2.ZERO:
+				var new_string_pos = global_position - (move_dir * TILE_SIZE * 0.5)
+				create_string_at_position(new_string_pos)
+				string_positions.append(new_string_pos)
+				strings_used += 1
+
+			# Decide next action
 			if input_dir == move_dir:
+				# Continue moving
+				prev_direction = move_dir
 				target_position += move_dir * TILE_SIZE
 				is_moving = true
-	
-				if string_attached:
-					var new_string: Node2D = SPIDER_STRINGS.instantiate()
-					var string_type = get_string_type(prev_direction, move_dir)
-					new_string.lines[string_type].visible = true
-					new_string.global_position = global_position + (move_dir * TILE_SIZE * 0.5)
-
-					add_sibling(new_string)
-					prev_direction = move_dir
-
 			else:
 				state = State.IDLE
 		else:
@@ -78,6 +107,12 @@ func process_walking_state() -> void:
 
 func process_talking_state() -> void:
 	velocity = Vector2.ZERO
+
+func remove_string_at(pos: Vector2) -> void:
+	for child in get_parent().get_children():
+		if child is Spider_Strings and child.global_position == pos:
+			child.queue_free()
+			break
 
 func update_animation() -> void:
 	player_sprites.flip_h = (facing == "left")
@@ -99,24 +134,29 @@ func _get_input_dir() -> Vector2:
 		return Vector2(0, sign(raw_input.y))
 	return Vector2.ZERO
 
+func create_string_at_position(pos: Vector2) -> void:
+	if strings_used >= string_limit:
+		print("Reached string limit.")
+		return
+
+	strings_used += 1
+	var new_string: Spider_Strings = SPIDER_STRINGS.instantiate()
+	var string_type: StringName = get_string_type(prev_direction, move_dir)
+	new_string.global_position = pos
+	string_positions.append(new_string.global_position)
+	add_sibling(new_string)
+	new_string.lines[string_type].visible = true
+	print("String placed: ", string_type)
+
 func get_string_type(prev: Vector2, current: Vector2) -> StringName:
-	if prev == current:
-		if current.x != 0:
-			return "String Horizontal"
-		elif current.y != 0:
-			return "String Vertical"
+	var string_type: StringName
+	if current.x != 0:
+		string_type = &"String Horizontal"
+	elif current.y != 0:
+		string_type = &"String Vertical"
 	else:
-		if prev == Vector2.RIGHT and current == Vector2.UP: return "Edge Up Right"
-		if prev == Vector2.LEFT and current == Vector2.UP: return "Edge Up Left"
-		if prev == Vector2.RIGHT and current == Vector2.DOWN: return "Edge Down Right"
-		if prev == Vector2.LEFT and current == Vector2.DOWN: return "Edge Down Left"
-		if prev == Vector2.DOWN and current == Vector2.RIGHT: return "Edge Down Right"
-		if prev == Vector2.UP and current == Vector2.RIGHT: return "Edge Up Right"
-		if prev == Vector2.DOWN and current == Vector2.LEFT: return "Edge Down Left"
-		if prev == Vector2.UP and current == Vector2.LEFT: return "Edge Up Left"
-
-	return "String Horizontal"
-
+		string_type = &"String Horizontal"
+	return string_type
 
 func _move_to_spawnpoint() -> void:
 	var spawnpoints = get_tree().get_nodes_in_group("spawnpoints")
@@ -129,6 +169,11 @@ func _connect_to_dialog_system() -> void:
 	var connection_result = (
 		Dialogs.dialog_started.connect(_on_dialog_started) == OK and
 		Dialogs.dialog_ended.connect(_on_dialog_ended) == OK)
+
+func connect_to_spider(spider: Node):
+	string_attached = true
+	string_limit = spider.max_strings
+	strings_used = 0
 
 func _on_dialog_started() -> void:
 	state = State.TALKING
