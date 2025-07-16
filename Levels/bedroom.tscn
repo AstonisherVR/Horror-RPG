@@ -79,7 +79,7 @@ scale = Vector2(8, 8)
 
 [node name="Spider Ass Left" parent="Spider Holder" instance=ExtResource("6_thocf")]
 position = Vector2(2304, 1024)
-max_strings = 72
+max_strings = 338
 
 [connection signal="body_entered" from="Tiles Holder/Ground/Web Tile" to="Tiles Holder/Ground/Web Tile" method="_on_body_entered"]
 [connection signal="body_exited" from="Tiles Holder/Ground/Web Tile" to="Tiles Holder/Ground/Web Tile" method="_on_body_exited"]

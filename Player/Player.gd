@@ -53,11 +53,30 @@ func cancel_current_string() -> void:
 
 func process_idle_state() -> void:
 	var input_dir = _get_input_dir()
-	if input_dir != Vector2.ZERO:
-		# Start moving
-		prev_direction = move_dir  # Store previous direction before updating
-		move_dir = input_dir.snapped(Vector2.ONE)
-		target_position = global_position + move_dir * TILE_SIZE
+	if input_dir == Vector2.ZERO:
+		return
+
+	var next_pos = global_position + input_dir * TILE_SIZE
+	var can_move = true
+
+	# Wall check (example - use your own check here)
+	if is_tile_blocked(next_pos):
+		can_move = false
+
+	# String check
+	if string_attached:
+		var is_backtracking = input_dir == -move_dir and string_positions.size() > 0 and next_pos == string_positions[-1]
+		var is_forward = input_dir == move_dir
+
+		if not is_backtracking and not is_forward:
+			can_move = false
+		elif not is_backtracking and strings_used >= string_limit:
+			can_move = false
+
+	if can_move:
+		prev_direction = move_dir
+		move_dir = input_dir
+		target_position = next_pos
 		is_moving = true
 		_set_facing(move_dir)
 		state = State.WALKING
@@ -69,41 +88,36 @@ func _set_facing(dir: Vector2) -> void:
 		facing = "up" if dir.y < 0 else "down"
 
 func process_walking_state() -> void:
-	if is_moving:
-		var to_target = target_position - global_position
-		var step = move_dir * walk_speed * get_physics_process_delta_time()
+	if not is_moving:
+		return
 
-		if step.length() >= to_target.length():
-			# Snap to target position
-			global_position = target_position
-			is_moving = false
+	var to_target = target_position - global_position
+	var step = move_dir * walk_speed * get_physics_process_delta_time()
 
-			var input_dir: Vector2 = _get_input_dir().snapped(Vector2.ONE)
+	if step.length() >= to_target.length():
+		global_position = target_position
+		is_moving = false
 
-			# Handle backtracking (remove last string)
-			if input_dir == -move_dir and string_positions.size() > 0:
-				var last_pos = string_positions.pop_back()
-				remove_string_at(last_pos)
-				strings_used -= 1
-				print("Backtracked, string removed")
+		# Handle string backtracking
+		if string_attached and string_positions.size() > 0 and global_position == string_positions[-1]:
+			var last_pos = string_positions.pop_back()
+			remove_string_at(last_pos)
+			strings_used -= 1
+			print("Backtracked, string removed")
 
-			# Handle forward movement (place new string)
-			elif string_attached and prev_direction != Vector2.ZERO:
-				var new_string_pos = global_position - (move_dir * TILE_SIZE * 0.5)
-				create_string_at_position(new_string_pos)
-				string_positions.append(new_string_pos)
-				strings_used += 1
+		# Handle forward string placing
+		elif string_attached and prev_direction != Vector2.ZERO and strings_used < string_limit:
+			var new_string_pos = global_position - (move_dir * TILE_SIZE * 0.5)
+			create_string_at_position(new_string_pos)
 
-			# Decide next action
-			if input_dir == move_dir:
-				# Continue moving
-				prev_direction = move_dir
-				target_position += move_dir * TILE_SIZE
-				is_moving = true
-			else:
-				state = State.IDLE
-		else:
-			global_position += step
+		state = State.IDLE
+	else:
+		global_position += step
+
+func is_tile_blocked(pos: Vector2) -> bool:
+	var tilemap = get_parent().get_node("TileMap") # Adjust path as needed
+	var cell = tilemap.local_to_map(pos)
+	return tilemap.get_cell_source_id(0, cell) != -1 and tilemap.get_cell_tile_data(0, cell).get_custom_data("is_wall") == true
 
 func process_talking_state() -> void:
 	velocity = Vector2.ZERO
