@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://bkba04xxwfbsx" path="res://NPC/Npc.tscn" id="1_5cfbo"]
 
-[node name="Inky" instance=ExtResource("1_5cfbo")]
-character_name = "Inky"
+[node name="Inki" instance=ExtResource("1_5cfbo")]
+character_name = "Inki"
 dialogs = Array[String](["There is a spider under your Bed! Find a way to give him some web."])
 
 [node name="Sprite" parent="." index="0"]

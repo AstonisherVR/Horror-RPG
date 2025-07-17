@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://bkba04xxwfbsx" path="res://NPC/Npc.tscn" id="1_52pss"]
 
-[node name="Pinky" instance=ExtResource("1_52pss")]
-character_name = "Pinky"
+[node name="Pinki" instance=ExtResource("1_52pss")]
+character_name = "Pinki"
 
 [node name="Sprite" parent="." index="0"]
 position = Vector2(0.564028, 32.0796)

@@ -12,8 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://d4epkmq16yt3" path="res://Spider Asses/spider_ass_up.tscn" id="9_lknj4"]
 [ext_resource type="Texture2D" uid="uid://c844dqr8guei6" path="res://General Assets/drawer.PNG" id="10_rdm1f"]
 [ext_resource type="Texture2D" uid="uid://dmucoijbt25bq" path="res://General Assets/desk.PNG" id="11_d0bpv"]
-[ext_resource type="PackedScene" uid="uid://ctbblky2gaw2h" path="res://NPC/Ghosts/Inky.tscn" id="12_nvd7q"]
-[ext_resource type="PackedScene" uid="uid://yfa76bgq8ol7" path="res://NPC/Ghosts/Pinky.tscn" id="13_l4u5s"]
+[ext_resource type="PackedScene" uid="uid://ctbblky2gaw2h" path="res://NPC/Ghosts/Inki.tscn" id="12_nvd7q"]
+[ext_resource type="PackedScene" uid="uid://yfa76bgq8ol7" path="res://NPC/Ghosts/Pinki.tscn" id="13_l4u5s"]
 
 [sub_resource type="Resource" id="Resource_j12bj"]
 script = ExtResource("3_vviiv")
@@ -87,7 +87,6 @@ position = Vector2(-3072, -2048)
 
 [node name="Wake up Animation" parent="." instance=ExtResource("7_5c0hu")]
 unique_name_in_owner = true
-visible = false
 position = Vector2(1, -38)
 scale = Vector2(8, 8)
 
