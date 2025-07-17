@@ -14,6 +14,7 @@ var move_dir: Vector2 = Vector2.ZERO
 var prev_direction: Vector2 = Vector2.ZERO
 
 var target_position: Vector2 = Vector2.ZERO
+var string_start_dir: Vector2 = Vector2.ZERO
 
 var string_limit: int = 0
 var strings_used: int = 0
@@ -86,7 +87,7 @@ func process_idle_state() -> void:
 			print("Blocked: in path or limit reached.")
 
 	if can_move:
-		print("Moving from", global_position, "to", next_pos)
+		#print("Moving from", global_position, "to", next_pos)
 		prev_direction = move_dir
 		move_dir = input_dir
 		target_position = next_pos
@@ -149,7 +150,7 @@ func remove_string_at(pos: Vector2) -> void:
 			break
 
 func is_web_tile(pos: Vector2) -> bool:
-	var tilemap = $"../Tiles Holder/Ground"
+	var tilemap = $"../Ground"
 	var cell = tilemap.local_to_map(pos)
 	var tile_data = tilemap.get_cell_tile_data(cell)
 	if tile_data:
@@ -176,21 +177,32 @@ func create_string_at_position(pos: Vector2) -> void:
 	if strings_used >= string_limit:
 		print("Reached string limit.")
 		return
+
 	strings_used += 1
+	string_positions.append(pos)
+
 	var new_string: Spider_Strings = SPIDER_STRINGS.instantiate()
 	new_string.global_position = pos
-	string_positions.append(pos)
 	get_parent().add_child(new_string)
-	var string_type: StringName = get_string_type(move_dir)
-	new_string.lines[string_type].visible = true
+
+	# FIX: Calculate direction from *actual last string* to current pos
+	var actual_prev_direction := Vector2.ZERO
+	if string_positions.size() > 1:
+		var prev_pos = string_positions[-2]
+		actual_prev_direction = (pos - prev_pos).normalized()
+	elif string_positions.size() == 1:
+		actual_prev_direction = string_start_dir
+	else:
+		actual_prev_direction = move_dir
+
+
+	var string_type: StringName = get_string_type(actual_prev_direction, move_dir)
+	new_string.setup(string_type, actual_prev_direction, move_dir)
+
 	print("String placed at", pos, "Type:", string_type)
 
-func get_string_type(dir: Vector2) -> StringName:
-	if abs(dir.x) > 0:
-		return "String Horizontal"
-	elif abs(dir.y) > 0:
-		return "String Vertical"
-	return "String Horizontal"
+func get_string_type(prev_dir: Vector2, current_dir: Vector2) -> StringName:
+	return "String Line" if prev_dir == current_dir else "String Edge"
 
 func _move_to_spawnpoint() -> void:
 	var spawnpoints = get_tree().get_nodes_in_group("spawnpoints")
@@ -208,7 +220,15 @@ func connect_to_spider(spider: Node) -> void:
 	string_limit = spider.max_strings
 	strings_used = 0
 	string_positions.clear()
-	print("Connected to spider. Limit:", string_limit)
+	# Detect direction based on wall side (example assumes right wall)
+	string_start_dir = (global_position - spider.global_position).normalized()
+	print("Connected to spider. Limit:", string_limit, " Start Dir:", string_start_dir)
+
+func snap_dir(dir: Vector2) -> Vector2:
+	if abs(dir.x) > abs(dir.y):
+		return Vector2(sign(dir.x), 0)
+	else:
+		return Vector2(0, sign(dir.y))
 
 func _on_dialog_started() -> void:
 	state = State.TALKING

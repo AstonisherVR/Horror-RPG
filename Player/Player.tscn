@@ -122,13 +122,17 @@ animations = [{
 size = Vector2(512, 512)
 
 [node name="Girl" type="CharacterBody2D" groups=["player"]]
-z_index = 1
+z_index = 2
 y_sort_enabled = true
 script = ExtResource("1_7n8ao")
 
 [node name="Camera" type="Camera2D" parent="."]
 position = Vector2(0, -48)
 zoom = Vector2(0.2, 0.2)
+limit_left = -5888
+limit_top = -768
+limit_right = 768
+limit_bottom = 5888
 
 [node name="PhantomCameraHost" type="Node" parent="Camera"]
 process_priority = 300
@@ -138,7 +142,6 @@ metadata/_custom_type_script = "uid://bd046eokvcnu2"
 
 [node name="Player Sprites" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(0, -128)
 scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_evw08")
 animation = &"walk_down"

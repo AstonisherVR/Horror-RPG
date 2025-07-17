@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://13g6ubgceo1q"
-path="res://.godot/imported/neutral_point_light.webp-93d20448599e44e27406da1608665597.ctex"
+uid="uid://o16v7kenxu02"
+path="res://.godot/imported/String Spritesheet.png-82c9762f7e311561b13a4863818947e4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://General Assets/neutral_point_light.webp"
-dest_files=["res://.godot/imported/neutral_point_light.webp-93d20448599e44e27406da1608665597.ctex"]
+source_file="res://General Assets/String Spritesheet.png"
+dest_files=["res://.godot/imported/String Spritesheet.png-82c9762f7e311561b13a4863818947e4.ctex"]
 
 [params]
 

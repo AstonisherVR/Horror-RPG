@@ -1,26 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://bu1tqqveuyxfq"]
+[gd_scene load_steps=3 format=3 uid="uid://bu1tqqveuyxfq"]
 
 [ext_resource type="Script" uid="uid://b8trr1a1al647" path="res://spider_strings.gd" id="1_mstok"]
+[ext_resource type="Texture2D" uid="uid://o16v7kenxu02" path="res://General Assets/String Spritesheet.png" id="1_xtrau"]
 
-[node name="Spider Strings" type="Node2D"]
+[node name="Spider Strings" type="Sprite2D"]
+texture = ExtResource("1_xtrau")
+hframes = 2
 script = ExtResource("1_mstok")
-
-[node name="String Line Vertical" type="Line2D" parent="."]
-unique_name_in_owner = true
-visible = false
-points = PackedVector2Array(0, -256, 0, 256)
-width = 64.0
-default_color = Color(0.784314, 0.784314, 0.784314, 1)
-joint_mode = 2
-begin_cap_mode = 2
-end_cap_mode = 2
-
-[node name="String Line Horizontal" type="Line2D" parent="."]
-unique_name_in_owner = true
-visible = false
-points = PackedVector2Array(-256, 0, 256, 0)
-width = 64.0
-default_color = Color(0.784314, 0.784314, 0.784314, 1)
-joint_mode = 2
-begin_cap_mode = 2
-end_cap_mode = 2

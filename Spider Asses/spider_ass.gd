@@ -7,6 +7,7 @@ var player: Player
 
 func _ready() -> void:
 	hide()
+	apear()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if player == null: return

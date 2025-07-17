@@ -8,17 +8,17 @@ var pinki_interaction_one_activated: bool = false
 static var total_strings_placed: int = 0
 
 func _ready() -> void:
-	wake_up_sequence()
+	#wake_up_sequence()
 	pass
 
 func wake_up_sequence() -> void:
 	disable_speed()
 	#print("Start wake up sequence")
-	
-	#wake_up_animation.show()
-	#wake_up_animation.start()
-	#await wake_up_animation.wake_up
-	#await get_tree().create_timer(.5).timeout
+
+	wake_up_animation.show()
+	wake_up_animation.start()
+	await wake_up_animation.wake_up
+	await get_tree().create_timer(.5).timeout
 	Dialogs.show_dialog("...", girl_name)
 	await wait_for_dialog_to_end()
 	#print("Line 1 finished")

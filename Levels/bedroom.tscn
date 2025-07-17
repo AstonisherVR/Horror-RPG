@@ -1,9 +1,8 @@
-[gd_scene load_steps=18 format=4 uid="uid://b4dfqb21wfiq8"]
+[gd_scene load_steps=19 format=4 uid="uid://b4dfqb21wfiq8"]
 
 [ext_resource type="Script" uid="uid://d245ftb0lg0lc" path="res://Levels/bedroom.gd" id="1_ysclg"]
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="2_4vxgd"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="3_vjt3k"]
-[ext_resource type="Texture2D" uid="uid://cmj44ryuvv5oq" path="res://General Assets/Tilesheet textures bedroom.png" id="4_thocf"]
 [ext_resource type="PackedScene" uid="uid://5srcxwwpl8vm" path="res://Spider Asses/spider_ass_left.tscn" id="6_thocf"]
 [ext_resource type="PackedScene" uid="uid://ctd3mgp0s172q" path="res://Player/Player.tscn" id="7_gvdbq"]
 [ext_resource type="PackedScene" uid="uid://deqgnj30xx13t" path="res://misc/UI.tscn" id="8_qog7a"]
@@ -22,7 +21,6 @@ transition = 0
 ease = 2
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_31ebk"]
-texture = ExtResource("4_thocf")
 texture_region_size = Vector2i(512, 512)
 0:0/0 = 0
 0:0/0/custom_data_0 = true
@@ -52,7 +50,17 @@ custom_data_layer_1/name = "web_tile"
 custom_data_layer_1/type = 1
 sources/1 = SubResource("TileSetAtlasSource_31ebk")
 
+[sub_resource type="Gradient" id="Gradient_31ebk"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_jfu1x"]
+gradient = SubResource("Gradient_31ebk")
+width = 5120
+height = 5120
+
 [node name="Bedroom" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_ysclg")
 metadata/_edit_horizontal_guides_ = [-854.0]
 
@@ -89,6 +97,7 @@ position = Vector2(512, 1024)
 scale = Vector2(8, 8)
 
 [node name="Spider Ass Left" parent="." instance=ExtResource("6_thocf")]
+z_index = 0
 position = Vector2(768, 2048)
 max_strings = 16
 
@@ -105,17 +114,21 @@ scale = Vector2(1, 1.25)
 texture = ExtResource("12_thocf")
 
 [node name="Pinky" parent="." instance=ExtResource("13_jfu1x")]
-z_index = 0
-y_sort_enabled = false
 position = Vector2(0, 1024)
 who_am_i = 1
 
 [node name="Quest" parent="Pinky" instance=ExtResource("13_gvdbq")]
 
 [node name="Inky" parent="." instance=ExtResource("12_31ebk")]
-z_index = 0
-y_sort_enabled = false
 position = Vector2(-1536, 1024)
 scale = Vector2(-1, 1)
 who_am_i = 0
 dialogs = Array[String](["There is a spider under your Bed! Find a way to give him some web.", ""])
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(90, 90)
+texture = SubResource("GradientTexture2D_jfu1x")
+
+[node name="Spider Ass Left2" parent="." instance=ExtResource("6_thocf")]
+position = Vector2(-3328, 512)
+max_strings = 19

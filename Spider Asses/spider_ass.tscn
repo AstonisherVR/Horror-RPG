@@ -29,6 +29,7 @@ animations = [{
 }]
 
 [node name="Spider Ass" type="Area2D"]
+z_index = 1
 script = ExtResource("1_bqh0q")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
