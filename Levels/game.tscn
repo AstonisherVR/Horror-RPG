@@ -1,10 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://damx5ema0gns7"]
+[gd_scene load_steps=10 format=3 uid="uid://damx5ema0gns7"]
 
 [ext_resource type="PackedScene" uid="uid://ctd3mgp0s172q" path="res://Player/Player.tscn" id="1_uda3f"]
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="2_jycte"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="3_ev4ff"]
 [ext_resource type="PackedScene" uid="uid://deqgnj30xx13t" path="res://misc/UI.tscn" id="4_xfsjo"]
-[ext_resource type="PackedScene" uid="uid://bkba04xxwfbsx" path="res://NPC/Npc.tscn" id="5_qe8hq"]
+[ext_resource type="PackedScene" uid="uid://d4epkmq16yt3" path="res://Spider Asses/spider_ass_up.tscn" id="5_ev4ff"]
+[ext_resource type="PackedScene" uid="uid://d3823rvefgd1a" path="res://Spider Asses/spider_ass_right.tscn" id="6_xfsjo"]
+[ext_resource type="PackedScene" uid="uid://5srcxwwpl8vm" path="res://Spider Asses/spider_ass_left.tscn" id="7_qe8hq"]
 
 [sub_resource type="Resource" id="Resource_fc0e3"]
 script = ExtResource("3_ev4ff")
@@ -27,7 +29,7 @@ position = Vector2(0, -48)
 script = ExtResource("2_jycte")
 follow_mode = 5
 follow_target = NodePath("../Girl")
-zoom = Vector2(0.175, 0.175)
+zoom = Vector2(0.2, 0.2)
 tween_resource = SubResource("Resource_fc0e3")
 follow_offset = Vector2(0, -48)
 follow_damping = true
@@ -42,13 +44,17 @@ metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 [node name="UI" parent="." instance=ExtResource("4_xfsjo")]
 
 [node name="BG" type="Sprite2D" parent="."]
-visible = false
 modulate = Color(0.206504, 0.0116302, 0.198272, 1)
 z_index = -115
 texture_repeat = 2
 scale = Vector2(50, 50)
 texture = SubResource("PlaceholderTexture2D_e2o6t")
 
-[node name="NPC" parent="." instance=ExtResource("5_qe8hq")]
-position = Vector2(1034, -1)
-dialogs = Array[String](["HELLO ONCE", "HELLO AGAIN"])
+[node name="Spider Ass Up" parent="." instance=ExtResource("5_ev4ff")]
+position = Vector2(512, -1536)
+
+[node name="Spider Ass Right" parent="." instance=ExtResource("6_xfsjo")]
+position = Vector2(-1024, -512)
+
+[node name="Spider Ass Left" parent="." instance=ExtResource("7_qe8hq")]
+position = Vector2(1024, -512)

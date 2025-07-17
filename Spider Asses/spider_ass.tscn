@@ -35,11 +35,11 @@ script = ExtResource("1_bqh0q")
 shape = SubResource("RectangleShape2D_20daf")
 
 [node name="Texture" type="AnimatedSprite2D" parent="."]
-scale = Vector2(1.25, 1)
+scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_tlsba")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.282854
+frame_progress = 0.683147
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

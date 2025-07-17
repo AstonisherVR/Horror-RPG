@@ -46,6 +46,13 @@ movie_writer/fps=30
 
 enabled=PackedStringArray("res://addons/maaacks_game_template/plugin.cfg", "res://addons/phantom_camera/plugin.cfg")
 
+[global_group]
+
+Down=""
+Left=""
+Right=""
+Up=""
+
 [gui]
 
 theme/custom="uid://klqgh6jw46be"

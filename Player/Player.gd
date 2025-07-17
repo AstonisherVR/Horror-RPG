@@ -24,7 +24,7 @@ var facing: StringName = "down"
 var player_name: StringName = "Ivy"
 
 var is_holding_cancel: bool = false
-var is_moving: bool = false
+static var is_moving: bool = false
 var string_attached: bool = false
 
 func _ready() -> void:
@@ -47,6 +47,7 @@ func _input(event: InputEvent) -> void:
 			cancel_current_string()
 
 	if event.is_action_pressed("interact"):
+		if is_moving: return
 		if string_attached and is_web_tile(global_position):
 			print("Placed string via interaction")
 			string_attached = false
@@ -129,7 +130,7 @@ func _is_string_at_position(pos: Vector2) -> bool:
 	return pos in string_positions
 
 func is_tile_blocked(pos: Vector2) -> bool:
-	var tilemap = $"../Tiles Holder/Ground"
+	var tilemap = $"../Ground"
 	var cell = tilemap.local_to_map(pos)
 	if tilemap.get_cell_source_id(cell) == -1:
 		return false

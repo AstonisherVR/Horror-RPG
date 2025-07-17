@@ -8,6 +8,8 @@ text Quest.process() returns
 
 var active = false
 
+#@export var is_inki
+@export_enum("Inki", "Pinki") var who_am_i
 @export var character_name: String = "Nameless NPC"
 @export var dialogs: Array[String] = ["..."] # (Array, String, MULTILINE)
 var current_dialog = 0
@@ -29,7 +31,8 @@ func _input(event):
 	# Bail if the event is not a pressed "interact" action
 	if not event.is_action_pressed("interact"):
 		return
-
+	elif Player.is_moving:
+		return
 	# If the character is a questgiver delegate getting the text
 	# to the Quest node, show it and end the function
 	if has_node("Quest"):
