@@ -34,7 +34,13 @@ PhantomCameraManager="*res://addons/phantom_camera/scripts/managers/phantom_came
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/size/always_on_top=true
-window/stretch/mode="viewport"
+window/stretch/mode="canvas_items"
+
+[editor]
+
+movie_writer/mjpeg_quality=0.5
+movie_writer/movie_file="C:/Users/GDA 24/Documents/recording.avi"
+movie_writer/fps=30
 
 [editor_plugins]
 

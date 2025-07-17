@@ -119,19 +119,20 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ddoul"]
-size = Vector2(192, 384)
+size = Vector2(512, 512)
 
 [node name="Girl" type="CharacterBody2D" groups=["player"]]
+z_index = 1
 y_sort_enabled = true
 script = ExtResource("1_7n8ao")
 
 [node name="Camera" type="Camera2D" parent="."]
 position = Vector2(0, -48)
-zoom = Vector2(0.175, 0.175)
-limit_left = -5376
-limit_top = -1792
-limit_right = 2816
-limit_bottom = 2816
+zoom = Vector2(0.26, 0.26)
+limit_left = -5888
+limit_top = -2816
+limit_right = -768
+limit_bottom = 3840
 
 [node name="PhantomCameraHost" type="Node" parent="Camera"]
 process_priority = 300
@@ -141,6 +142,8 @@ metadata/_custom_type_script = "uid://bd046eokvcnu2"
 
 [node name="Player Sprites" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
+position = Vector2(0, -128)
+scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_evw08")
 animation = &"walk_down"
 

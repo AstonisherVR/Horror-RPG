@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://ci88wtj63beka"]
+
+[ext_resource type="Texture2D" uid="uid://b34yp8k82u473" path="res://Bed/bed.png" id="1_xqjo8"]
+
+[node name="Bed" type="Sprite2D"]
+scale = Vector2(2, 2)
+texture = ExtResource("1_xqjo8")

@@ -1,0 +1,125 @@
+[gd_scene load_steps=18 format=4 uid="uid://ctnnsniox6lju"]
+
+[ext_resource type="Script" uid="uid://d245ftb0lg0lc" path="res://Levels/bedroom.gd" id="1_0bdsy"]
+[ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="2_lknj4"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="3_vviiv"]
+[ext_resource type="Texture2D" uid="uid://cmj44ryuvv5oq" path="res://General Assets/Tilesheet textures bedroom.png" id="4_bci66"]
+[ext_resource type="PackedScene" uid="uid://ctd3mgp0s172q" path="res://Player/Player.tscn" id="5_sh8uu"]
+[ext_resource type="PackedScene" uid="uid://deqgnj30xx13t" path="res://misc/UI.tscn" id="6_jrm1x"]
+[ext_resource type="PackedScene" uid="uid://pfq2lkxwojss" path="res://Wake Up Animation/wake_up_animation.tscn" id="7_5c0hu"]
+[ext_resource type="PackedScene" uid="uid://5srcxwwpl8vm" path="res://Spider Asses/spider_ass_left.tscn" id="8_r2ol7"]
+[ext_resource type="PackedScene" uid="uid://ci88wtj63beka" path="res://Bed/bed.tscn" id="9_52i80"]
+[ext_resource type="PackedScene" uid="uid://d4epkmq16yt3" path="res://Spider Asses/spider_ass_up.tscn" id="9_lknj4"]
+[ext_resource type="Texture2D" uid="uid://c844dqr8guei6" path="res://General Assets/drawer.PNG" id="10_rdm1f"]
+[ext_resource type="Texture2D" uid="uid://dmucoijbt25bq" path="res://General Assets/desk.PNG" id="11_d0bpv"]
+[ext_resource type="PackedScene" uid="uid://ctbblky2gaw2h" path="res://NPC/Ghosts/Inky.tscn" id="12_nvd7q"]
+[ext_resource type="PackedScene" uid="uid://yfa76bgq8ol7" path="res://NPC/Ghosts/Pinky.tscn" id="13_l4u5s"]
+
+[sub_resource type="Resource" id="Resource_j12bj"]
+script = ExtResource("3_vviiv")
+duration = 1.0
+transition = 0
+ease = 2
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_31ebk"]
+texture = ExtResource("4_bci66")
+texture_region_size = Vector2i(512, 512)
+0:0/0 = 0
+0:0/0/custom_data_0 = true
+1:0/0 = 0
+1:0/0/custom_data_0 = true
+2:0/0 = 0
+2:0/0/custom_data_0 = true
+3:0/0 = 0
+3:0/0/custom_data_0 = true
+4:0/0 = 0
+5:0/0 = 0
+0:1/0 = 0
+0:1/0/custom_data_0 = true
+1:1/0 = 0
+1:1/0/custom_data_0 = true
+2:1/0 = 0
+2:1/0/custom_data_0 = true
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_jfu1x"]
+tile_size = Vector2i(512, 512)
+custom_data_layer_0/name = "is_wall"
+custom_data_layer_0/type = 1
+custom_data_layer_1/name = "web_tile"
+custom_data_layer_1/type = 1
+sources/1 = SubResource("TileSetAtlasSource_31ebk")
+
+[node name="Bedroom" type="Node2D"]
+script = ExtResource("1_0bdsy")
+metadata/_edit_horizontal_guides_ = [-854.0]
+
+[node name="PhantomCamera2D" type="Node2D" parent="." node_paths=PackedStringArray("follow_target")]
+top_level = true
+position = Vector2(-3229.54, -1431.38)
+script = ExtResource("2_lknj4")
+follow_mode = 5
+follow_target = NodePath("../Girl")
+zoom = Vector2(0.26, 0.26)
+tween_resource = SubResource("Resource_j12bj")
+follow_offset = Vector2(0, -48)
+follow_damping = true
+follow_damping_value = Vector2(0.2, 0.2)
+dead_zone_height = 0.05
+limit_target = NodePath("../Tiles Holder/Ground")
+metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
+
+[node name="Tiles Holder" type="Marker2D" parent="."]
+z_index = -1
+position = Vector2(-256, -256)
+
+[node name="Ground" type="TileMapLayer" parent="Tiles Holder"]
+tile_map_data = PackedByteArray("AAD7//3/AQADAAEAAAD7//7/AQADAAEAAAD7////AQADAAEAAAD7/wAAAQADAAEAAAD7/wEAAQADAAEAAAD7/wIAAQADAAEAAAD7/wMAAQADAAEAAAD7/wQAAQADAAEAAAD7/wUAAQADAAEAAAD8//3/AQADAAEAAAD8//7/AQADAAEAAAD8////AQADAAEAAAD8/wAAAQADAAEAAAD8/wEAAQADAAEAAAD8/wIAAQADAAEAAAD8/wMAAQADAAEAAAD8/wQAAQADAAEAAAD8/wUAAQADAAEAAAD9//3/AQADAAEAAAD9//7/AQADAAEAAAD9////AQADAAEAAAD9/wAAAQADAAEAAAD9/wEAAQADAAEAAAD9/wIAAQADAAEAAAD9/wMAAQADAAEAAAD9/wQAAQADAAEAAAD9/wUAAQADAAEAAAD3//7/AQAEAAAAAAD3/wEAAQADAAEAAAD3/wIAAQADAAEAAAD3/wMAAQADAAEAAAD3/wQAAQADAAEAAAD3/wUAAQADAAEAAAD4//7/AQADAAEAAAD4/wAAAQADAAEAAAD4/wEAAQADAAEAAAD4/wIAAQADAAEAAAD4/wMAAQADAAEAAAD4/wQAAQADAAEAAAD4/wUAAQADAAEAAAD5//3/AQADAAEAAAD5//7/AQADAAEAAAD5////AQADAAEAAAD5/wAAAQADAAEAAAD5/wEAAQADAAEAAAD5/wIAAQADAAEAAAD5/wMAAQADAAEAAAD5/wQAAQADAAEAAAD5/wUAAQADAAEAAAD6//3/AQADAAEAAAD6//7/AQADAAEAAAD6////AQADAAEAAAD6/wAAAQADAAEAAAD6/wEAAQADAAEAAAD6/wIAAQADAAEAAAD6/wMAAQADAAEAAAD6/wQAAQADAAEAAAD6/wUAAQADAAEAAAD2//3/AQADAAEAAAD2//7/AQADAAEAAAD2////AQAFAAAAAAD2/wAAAQADAAEAAAD2/wEAAQADAAEAAAD2/wIAAQADAAEAAAD2/wMAAQADAAEAAAD2/wQAAQADAAEAAAD2/wUAAQADAAEAAAD9//z/AQADAAEAAAD8//z/AQADAAEAAAD7//z/AQADAAEAAAD6//z/AQADAAEAAAD5//z/AQADAAEAAAD4//z/AQADAAEAAAD3//z/AQADAAEAAAD2//z/AQADAAEAAAD1//z/AQAAAAAAAAD1//3/AQAAAAAAAAD1//7/AQAAAAAAAAD1////AQAAAAEAAAD1/wAAAQAAAAEAAAD1/wEAAQAAAAEAAAD1/wIAAQAAAAAAAAD1/wMAAQAAAAAAAAD1/wQAAQAAAAEAAAD1/wUAAQAAAAEAAAD1/wYAAQAAAAEAAAD2/wYAAQADAAEAAAD3/wYAAQADAAEAAAD4/wYAAQADAAEAAAD5/wYAAQADAAEAAAD6/wYAAQADAAEAAAD7/wYAAQADAAEAAAD8/wYAAQADAAEAAAD9/wYAAQADAAEAAAD1//v/AQAAAAAAAAD2//v/AQAAAAEAAAD3//v/AQAAAAEAAAD5//v/AQAAAAAAAAD6//v/AQACAAAAAAD7//v/AQAAAAAAAAD9//v/AQABAAEAAAD1/wcAAQAAAAAAAAD2/wcAAQAAAAAAAAD3/wcAAQAAAAAAAAD4/wcAAQAAAAAAAAD5/wcAAQAAAAAAAAD6/wcAAQAAAAAAAAD7/wcAAQAAAAAAAAD8/wcAAQAAAAAAAAD9/wcAAQAAAAAAAAD8//v/AQADAAAAAAD+//z/AQAAAAEAAAD+//3/AQAAAAEAAAD+//7/AQAAAAAAAAD+////AQAAAAAAAAD+/wAAAQAAAAAAAAD+/wEAAQAAAAAAAAD+/wIAAQAAAAEAAAD+/wMAAQAAAAEAAAD+/wQAAQAAAAEAAAD+/wUAAQAAAAEAAAD+/wYAAQAAAAEAAAD+//v/AQAAAAEAAAD+/wcAAQAAAAEAAAD4////AQADAAEAAAD3////AQADAAEAAAD3/wAAAQADAAEAAAD3//3/AQAEAAEAAAD4//3/AQADAAEAAAD4//v/AQAAAAEAAAA=")
+tile_set = SubResource("TileSet_jfu1x")
+
+[node name="Girl" parent="." instance=ExtResource("5_sh8uu")]
+unique_name_in_owner = true
+position = Vector2(-3072, -2048)
+
+[node name="UI" parent="." instance=ExtResource("6_jrm1x")]
+
+[node name="Wake up Animation" parent="." instance=ExtResource("7_5c0hu")]
+unique_name_in_owner = true
+visible = false
+position = Vector2(1, -38)
+scale = Vector2(8, 8)
+
+[node name="Spider Holder" type="Marker2D" parent="."]
+
+[node name="Spider Ass Left" parent="Spider Holder" instance=ExtResource("8_r2ol7")]
+position = Vector2(-1280, -1024)
+max_strings = 16
+
+[node name="Spider Ass Up" parent="Spider Holder" instance=ExtResource("9_lknj4")]
+position = Vector2(-2304, -2560)
+max_strings = 5
+
+[node name="Bed" parent="." instance=ExtResource("9_52i80")]
+position = Vector2(-4352, -2304)
+
+[node name="Drawer" type="Sprite2D" parent="."]
+position = Vector2(-5120, -1280)
+scale = Vector2(1, 1.5)
+texture = ExtResource("10_rdm1f")
+
+[node name="Desk" type="Sprite2D" parent="."]
+position = Vector2(-1792, -2048)
+scale = Vector2(1, 1.25)
+texture = ExtResource("11_d0bpv")
+
+[node name="Inky" parent="." instance=ExtResource("12_nvd7q")]
+y_sort_enabled = false
+position = Vector2(-3584, -1536)
+
+[node name="Pinky" parent="." instance=ExtResource("13_l4u5s")]
+y_sort_enabled = false
+position = Vector2(-4096, -1536)
+scale = Vector2(-1, 1)
+dialogs = Array[String](["Good Job!"])

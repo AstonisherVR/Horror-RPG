@@ -1,49 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bu1tqqveuyxfq"]
+[gd_scene load_steps=2 format=3 uid="uid://bu1tqqveuyxfq"]
 
 [ext_resource type="Script" uid="uid://b8trr1a1al647" path="res://spider_strings.gd" id="1_mstok"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_mstok"]
-size = Vector2(128, 128)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_gxexv"]
-size = Vector2(128, 128)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_pmggf"]
-size = Vector2(128, 128)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_886dr"]
-size = Vector2(128, 128)
-
 [node name="Spider Strings" type="Node2D"]
 script = ExtResource("1_mstok")
-
-[node name="Area Up" type="Area2D" parent="."]
-unique_name_in_owner = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area Up"]
-position = Vector2(0, -256)
-shape = SubResource("RectangleShape2D_mstok")
-
-[node name="Area Right" type="Area2D" parent="."]
-unique_name_in_owner = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area Right"]
-position = Vector2(256, 0)
-shape = SubResource("RectangleShape2D_gxexv")
-
-[node name="Area Down" type="Area2D" parent="."]
-unique_name_in_owner = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area Down"]
-position = Vector2(0, 256)
-shape = SubResource("RectangleShape2D_pmggf")
-
-[node name="Area Left" type="Area2D" parent="."]
-unique_name_in_owner = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area Left"]
-position = Vector2(-256, 0)
-shape = SubResource("RectangleShape2D_886dr")
 
 [node name="String Line Vertical" type="Line2D" parent="."]
 unique_name_in_owner = true
