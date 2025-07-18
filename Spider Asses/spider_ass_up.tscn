@@ -5,12 +5,11 @@
 [node name="Spider Ass Up" groups=["Up"] instance=ExtResource("1_c8kb1")]
 
 [node name="CollisionShape2D" parent="." index="0"]
-position = Vector2(-256, 256)
+position = Vector2(0.00100708, 128)
 rotation = 1.57079
 
-[node name="Texture" parent="." index="1"]
-position = Vector2(-256, 256)
-
 [node name="Above Text" parent="." index="2"]
-offset_left = -1024.0
-offset_bottom = 0.0
+offset_left = -768.0
+offset_top = -768.0
+offset_right = 768.0
+offset_bottom = -256.0

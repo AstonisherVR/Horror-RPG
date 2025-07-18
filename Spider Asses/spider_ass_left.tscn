@@ -4,5 +4,8 @@
 
 [node name="Spider Ass Left" groups=["Left"] instance=ExtResource("1_qlcqw")]
 
+[node name="CollisionShape2D" parent="." index="0"]
+position = Vector2(-128, 0)
+
 [node name="Texture" parent="." index="1"]
 rotation = -4.71238

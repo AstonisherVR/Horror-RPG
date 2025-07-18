@@ -4,6 +4,9 @@
 
 [node name="Spider Ass Right" groups=["Right"] instance=ExtResource("1_18fow")]
 
+[node name="CollisionShape2D" parent="." index="0"]
+position = Vector2(128, 0)
+
 [node name="Texture" parent="." index="1"]
 rotation = -1.57079
 scale = Vector2(1.25, 1.5)

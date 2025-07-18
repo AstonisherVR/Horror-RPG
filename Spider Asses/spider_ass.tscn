@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cg2kdion7rkti" path="res://Spider Asses/Wall Spider.png" id="2_onsoa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_20daf"]
-size = Vector2(512, 256)
+size = Vector2(256, 256)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_onsoa"]
 atlas = ExtResource("2_onsoa")

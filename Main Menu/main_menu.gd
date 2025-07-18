@@ -1,9 +1,23 @@
 extends Control
 
+@onready var start_sfx: AudioStreamPlayer = %start_sfx
+@onready var overlay_black: ColorRect = %"Overlay Black"
+
 func _on_new_game_button_pressed() -> void:
+	var t = create_tween().set_ease(Tween.EASE_OUT_IN).set_trans(Tween.TRANS_ELASTIC).parallel()
+	t.tween_property(overlay_black, "color:a", 1.0, 2)
+	start_sfx.play()
+	%MenuContainer.hide()
+	await start_sfx.finished
+	await get_tree().create_timer(.5).timeout
 	get_tree().change_scene_to_file("res://Levels/bedroom.tscn")
 
 @export var options_packed_scene : PackedScene
+
+func _juice_button(button: Button) -> void:
+	var t = get_tree().create_tween()
+	t.tween_property(button, "scale", Vector2(1.1, 1.2), 0.08).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	t.tween_property(button, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 var options_scene
 var sub_menu
@@ -58,3 +72,14 @@ func _on_exit_button_pressed() -> void:
 
 func _on_back_button_pressed() -> void:
 	_close_sub_menu()
+
+
+func _on_exit_button_mouse_entered() -> void:
+	_juice_button(%ExitButton)
+
+
+func _on_options_button_mouse_entered() -> void:
+	_juice_button(%OptionsButton)
+
+func _on_new_game_button_mouse_entered() -> void:
+	_juice_button(%NewGameButton)

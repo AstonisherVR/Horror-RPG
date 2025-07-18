@@ -7,7 +7,6 @@ character_name = "Inki"
 dialogs = Array[String](["There is a spider under your Bed! Find a way to give him some web."])
 
 [node name="Sprite" parent="." index="0"]
-position = Vector2(0.564028, 32.0796)
 scale = Vector2(1, 0.993201)
 hframes = 3
 vframes = 2

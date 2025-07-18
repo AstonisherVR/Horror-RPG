@@ -1,6 +1,6 @@
 class_name Ass_Spider extends Area2D
 
-@export var max_strings: int = 1
+@export var msssax_strings: int = 1
 var in_use: bool = false
 var player_in: bool = false
 var player: Player
@@ -50,3 +50,24 @@ func apear():
 
 func disconnect_player():
 	in_use = false
+	player = null
+	player_in = false
+
+func follow_string_path(path: Array[Vector2]) -> void:
+	if path.is_empty():
+		print("No path to follow.")
+		return
+
+	print("Spider following path:", path)
+	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT_IN)
+
+	var duration_per_step := 0.25 # seconds per string step
+	var delay := 0.0
+
+	for point in path:
+		tween.tween_property(self, "global_position", point, duration_per_step).set_delay(delay)
+		delay += duration_per_step
+
+	tween.tween_callback(func():
+		print("Spider finished moving.")
+		in_use = false)

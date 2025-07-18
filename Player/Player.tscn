@@ -133,12 +133,12 @@ y_sort_enabled = true
 script = ExtResource("1_7n8ao")
 
 [node name="Camera" type="Camera2D" parent="."]
-position = Vector2(0, -48)
 zoom = Vector2(0.2, 0.2)
-limit_left = -19712
-limit_top = -8960
-limit_right = 7424
-limit_bottom = 13056
+limit_left = -6400
+limit_top = -1280
+limit_right = 1280
+limit_bottom = 4864
+editor_draw_limits = true
 
 [node name="PhantomCameraHost" type="Node" parent="Camera"]
 process_priority = 300
@@ -150,7 +150,7 @@ metadata/_custom_type_script = "uid://bd046eokvcnu2"
 unique_name_in_owner = true
 scale = Vector2(1.25, 1.25)
 sprite_frames = SubResource("SpriteFrames_evw08")
-animation = &"walk_left"
+animation = &"walk_down"
 
 [node name="Body Collision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_ddoul")

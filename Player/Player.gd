@@ -54,9 +54,21 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
 		if is_moving: return
 		if string_attached and is_web_tile(global_position):
+			if !string_positions.has(global_position):
+				string_positions.append(global_position)
+				create_string_at_position(global_position)
+			else:
+				print("Position already part of path.")
+
 			print("Placed string via interaction")
 			string_attached = false
-			Bedroom.total_strings_placed += 1
+			Bedroom.total_full_string_line_placed += 1
+
+			# Send path to spider
+			if curr_spider_holding:
+				curr_spider_holding.follow_string_path(string_positions.duplicate())
+
+
 
 func cancel_current_string() -> void:
 	if not string_attached:

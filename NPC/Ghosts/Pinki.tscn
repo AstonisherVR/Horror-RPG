@@ -6,7 +6,7 @@
 character_name = "Pinki"
 
 [node name="Sprite" parent="." index="0"]
-position = Vector2(0.564028, 32.0796)
+position = Vector2(0.564, 52)
 scale = Vector2(1, 0.993201)
 hframes = 3
 vframes = 2

@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dboeh8i18e2sh"]
+[gd_scene load_steps=6 format=3 uid="uid://dboeh8i18e2sh"]
 
 [ext_resource type="Script" uid="uid://cq5axaf7qnn2x" path="res://Main Menu/main_menu.gd" id="2_7vrkn"]
 [ext_resource type="PackedScene" uid="uid://boicxc6x4554n" path="res://Options Menu/master_options_menu_with_tabs.tscn" id="2_fu7sn"]
+[ext_resource type="Texture2D" uid="uid://bb6ojsu2ril08" path="res://General Assets/Hallway.png" id="3_15lat"]
+[ext_resource type="AudioStream" uid="uid://16rvtc63o8oh" path="res://General Assets/main menu start.ogg" id="5_60tkv"]
 [ext_resource type="Script" uid="uid://1nf36h0gms3q" path="res://addons/maaacks_game_template/base/scripts/capture_focus.gd" id="6_0o4t1"]
 
 [node name="MainMenu" type="Control"]
@@ -13,6 +15,33 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_7vrkn")
 options_packed_scene = ExtResource("2_fu7sn")
+
+[node name="Overlay Black" type="ColorRect" parent="."]
+unique_name_in_owner = true
+process_mode = 4
+top_level = true
+z_index = 275
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.178
+anchor_right = 1.0
+anchor_bottom = 0.822
+offset_top = -0.160004
+offset_bottom = -15.84
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_15lat")
+expand_mode = 1
 
 [node name="VersionMargin" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -68,7 +97,7 @@ anchor_right = 1.0
 offset_bottom = 67.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 48
-text = "Horror RPG"
+text = "Sleepbound"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -81,6 +110,7 @@ layout_mode = 2
 mouse_filter = 2
 
 [node name="SubTitleLabel" type="Label" parent="MenuContainer/SubTitleMargin/SubTitleContainer"]
+visible = false
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -109,14 +139,14 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -64.0
+offset_left = -320.0
 offset_top = -104.0
-offset_right = 64.0
-offset_bottom = 104.0
+offset_right = -192.0
+offset_bottom = 88.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 16
+theme_override_constants/separation = 24
 alignment = 1
 vertical = true
 script = ExtResource("6_0o4t1")
@@ -183,6 +213,19 @@ offset_right = 45.0
 grow_vertical = 0
 text = "Back"
 
+[node name="ColorRect2" type="ColorRect" parent="."]
+process_mode = 4
+z_index = -50
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -336.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.439216, 0.235294, 0.333333, 1)
+
 [node name="ColorRect" type="ColorRect" parent="."]
 process_mode = 4
 z_index = -50
@@ -190,12 +233,21 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 384.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0, 0, 0, 1)
+color = Color(0.513726, 0.356863, 0.309804, 1)
 
+[node name="start_sfx" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("5_60tkv")
+volume_db = -3.23
+
+[connection signal="mouse_entered" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/NewGameButton" to="." method="_on_new_game_button_mouse_entered"]
 [connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/NewGameButton" to="." method="_on_new_game_button_pressed"]
+[connection signal="mouse_entered" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/OptionsButton" to="." method="_on_options_button_mouse_entered"]
 [connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="mouse_entered" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/ExitButton" to="." method="_on_exit_button_mouse_entered"]
 [connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="pressed" from="FlowControlContainer/FlowControl/BackButton" to="." method="_on_back_button_pressed"]
