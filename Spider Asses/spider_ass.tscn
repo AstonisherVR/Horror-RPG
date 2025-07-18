@@ -40,7 +40,19 @@ scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_tlsba")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.683147
+frame_progress = 0.567949
+
+[node name="Above Text" type="Label" parent="."]
+unique_name_in_owner = true
+z_index = 10
+offset_left = -512.0
+offset_top = -512.0
+offset_right = 512.0
+offset_bottom = -320.0
+theme_override_font_sizes/font_size = 128
+text = "Press \"E\" to grab"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

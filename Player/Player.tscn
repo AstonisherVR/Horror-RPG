@@ -64,6 +64,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vlldt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ysni")
 }],
 "loop": true,
 "name": &"walk_down",
@@ -95,6 +98,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_p7tob")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5wa8t")
 }],
 "loop": true,
 "name": &"walk_right",
@@ -129,10 +135,10 @@ script = ExtResource("1_7n8ao")
 [node name="Camera" type="Camera2D" parent="."]
 position = Vector2(0, -48)
 zoom = Vector2(0.2, 0.2)
-limit_left = -5888
-limit_top = -768
-limit_right = 768
-limit_bottom = 5888
+limit_left = -19712
+limit_top = -8960
+limit_right = 7424
+limit_bottom = 13056
 
 [node name="PhantomCameraHost" type="Node" parent="Camera"]
 process_priority = 300
@@ -142,9 +148,9 @@ metadata/_custom_type_script = "uid://bd046eokvcnu2"
 
 [node name="Player Sprites" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
-scale = Vector2(1.5, 1.5)
+scale = Vector2(1.25, 1.25)
 sprite_frames = SubResource("SpriteFrames_evw08")
-animation = &"walk_down"
+animation = &"walk_left"
 
 [node name="Body Collision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_ddoul")

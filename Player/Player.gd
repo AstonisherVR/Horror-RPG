@@ -28,6 +28,8 @@ var is_holding_cancel: bool = false
 static var is_moving: bool = false
 var string_attached: bool = false
 
+var curr_spider_holding: Ass_Spider
+
 func _ready() -> void:
 	_move_to_spawnpoint()
 	_connect_to_dialog_system()
@@ -40,7 +42,9 @@ func _physics_process(delta: float) -> void:
 			process_walking_state()
 		State.TALKING:
 			process_talking_state()
-	update_animation()
+	if _get_input_dir() != prev_direction or !player_sprites.is_playing():
+		
+		update_animation()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("cancel_string"):
@@ -62,6 +66,7 @@ func cancel_current_string() -> void:
 		remove_string_at(pos)
 	string_positions.clear()
 	strings_used = 0
+	disconnect_to_spider()
 	print("String canceled.")
 
 func process_idle_state() -> void:
@@ -215,14 +220,18 @@ func _connect_to_dialog_system() -> void:
 	Dialogs.dialog_started.connect(_on_dialog_started)
 	Dialogs.dialog_ended.connect(_on_dialog_ended)
 
-func connect_to_spider(spider: Node) -> void:
+func connect_to_spider(spider: Ass_Spider) -> void:
 	string_attached = true
 	string_limit = spider.max_strings
 	strings_used = 0
 	string_positions.clear()
 	# Detect direction based on wall side (example assumes right wall)
-	string_start_dir = (global_position - spider.global_position).normalized()
+	string_start_dir = snap_dir(global_position - spider.global_position).normalized()
+	curr_spider_holding = spider
 	print("Connected to spider. Limit:", string_limit, " Start Dir:", string_start_dir)
+
+func disconnect_to_spider():
+	curr_spider_holding.disconnect_player()
 
 func snap_dir(dir: Vector2) -> Vector2:
 	if abs(dir.x) > abs(dir.y):
